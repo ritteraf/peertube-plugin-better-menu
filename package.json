@@ -1,14 +1,14 @@
 {
   "name": "peertube-plugin-menu-items",
   "description": "PeerTube plugin menu-items",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "author": "kontrollanten",
   "bugs": "https://framagit.org/kontrollanten/peertube-plugin-menu-items/issues",
   "clientScripts": [
     {
       "script": "dist/common-client-plugin.js",
       "scopes": [
-        "top-menu"
+        "common"
       ]
     }
   ],

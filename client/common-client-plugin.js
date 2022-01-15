@@ -1,23 +1,38 @@
 function register ({ registerHook, peertubeHelpers }) {
-	registerHook({
-    target: 'filter:top-menu.params',
-		handler: (items) => {
-			return [
-				...items.filter(item => item.key !== 'on-instance'),
-				{
-					key: 'categories',
-					title: 'Our categories',
-					children: [
-						{
-							key: 'science-and-technology',
-							title: 'Science and technology',
-							href: 'https://science-and-tech.com',
-						},
-					],
-				},
-			];
-		},
-	});
+  registerHook({
+    target: 'filter:left-menu.links.create.result',
+    handler: async (defaultLinks) => {
+      const { enabled, items } = await peertubeHelpers.getSettings();
+
+      if (!enabled) return defaultLinks;
+
+      const itemSections = items.split('\n\n')
+        .reduce((acc, val) => {
+          const [header, ...links] = val.split('\n');
+
+          return {
+            key: header.toLowerCase().replace(' ', '-'),
+            title: header,
+            links: links.filter(l => l).map(link => {
+              const href = /\(([^)]+)\)/.exec(val)[1];
+              const label = val.match(/\[(.*?)\]/)[1];
+
+              return {
+                icon: '',
+                label,
+                path: href,
+                shortLabel: label
+              };
+            }),
+          };
+        }, null);
+
+      return [
+        ...defaultLinks,
+        itemSections
+      ];
+    },
+  });
 }
 
 export {
