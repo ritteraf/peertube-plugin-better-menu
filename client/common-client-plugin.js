@@ -14,8 +14,8 @@ function register ({ registerHook, peertubeHelpers }) {
             key: header.toLowerCase().replace(' ', '-'),
             title: header,
             links: links.filter(l => l).map(link => {
-              const href = /\(([^)]+)\)/.exec(val)[1];
-              const label = val.match(/\[(.*?)\]/)[1];
+              const href = /\(([^)]+)\)/.exec(link)[1];
+              const label = link.match(/\[(.*?)\]/)[1];
 
               return {
                 icon: '',
