@@ -28,7 +28,7 @@ async function register ({ registerHook, peertubeHelpers }) {
         links: section.links.filter((link) => enabledMenuItems[section.key].some((l) => l === link.path))
       }))
 
-      const itemSections = items.split('\n\n')
+      const itemSections = items.trim().split('\n\n')
         .reduce((acc, val) => {
           const [header, ...links] = val.split('\n');
 
