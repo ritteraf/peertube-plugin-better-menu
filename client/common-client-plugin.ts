@@ -30,6 +30,7 @@ async function register ({ registerHook, peertubeHelpers }: RegisterClientOption
         ...section,
         links: section.links.filter((link) => {
           if (Object.keys(DEFAULT_MENU_ITEMS).includes(section.key) === false) {
+            // Keep links added by other plugins
             return true
           }
 
