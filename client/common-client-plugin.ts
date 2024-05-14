@@ -1,8 +1,11 @@
-async function register ({ registerHook, peertubeHelpers }) {
+import { RegisterClientOptions } from '@peertube/peertube-types/client'
+import { MenuItem } from '../shared/constants';
+
+async function register ({ registerHook, peertubeHelpers }: RegisterClientOptions) {
   const settings = await peertubeHelpers.getSettings()
   const enabledMenuItems = Object.keys(settings)
     .filter((setting) => setting.startsWith('menu-item-'))
-    .reduce((acc, val) => {
+    .reduce((acc: { [key: string]: string[] }, val) => {
       if (settings[val] === false) return acc
 
       const [group, path] = val.substring('menu-item-'.length).split('__')
@@ -18,8 +21,8 @@ async function register ({ registerHook, peertubeHelpers }) {
 
   registerHook({
     target: 'filter:left-menu.links.create.result',
-    handler: async (defaultLinks) => {
-      const { enabled, items } = await peertubeHelpers.getSettings();
+    handler: async (defaultLinks: MenuItem[]) => {
+      const { enabled, items } = await peertubeHelpers.getSettings() as { enabled: boolean, items: string };
 
       if (!enabled) return defaultLinks;
 
@@ -36,8 +39,8 @@ async function register ({ registerHook, peertubeHelpers }) {
             key: header.toLowerCase().replace(' ', '-'),
             title: header,
             links: links.filter(l => l).map(link => {
-              const href = /\(([^)]+)\)/.exec(link)[1];
-              const label = link.match(/\[(.*?)\]/)[1];
+              const [, href] = /\(([^)]+)\)/.exec(link) || [];
+              const [, label] = link.match(/\[(.*?)\]/) || [];
 
               return {
                 icon: '',
@@ -47,7 +50,7 @@ async function register ({ registerHook, peertubeHelpers }) {
               };
             }),
           };
-        }, null);
+        }, null as MenuItem | null);
 
       return [
         ...filteredLinks,

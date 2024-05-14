@@ -1,6 +1,9 @@
+import { RegisterServerOptions } from '@peertube/peertube-types'
+import { DEFAULT_MENU_ITEMS } from '../shared/constants'
+
 async function register ({
   registerSetting
-}) {
+}: RegisterServerOptions) {
   registerSetting({
     name: 'enabled',
     label: 'Enable plugin',
@@ -9,24 +12,8 @@ async function register ({
     private: false,
   });
 
-  const menuItems = {
-    'in-my-library': [
-      '/my-library/video-channels',
-      '/my-library/videos',
-      '/my-library/video-playlists',
-      '/videos/subscriptions',
-      '/my-library/history/videos'
-    ],
-    'on-instance': [
-      '/videos/overview',
-      '/videos/trending',
-      '/videos/recently-added',
-      '/videos/local'
-    ]
-  }
-
-  Object.keys(menuItems).map((key) =>
-      menuItems[key].forEach((path) =>
+  (Object.keys(DEFAULT_MENU_ITEMS) as Array<'on-instance' | 'in-my-library'>).map((key) =>
+    DEFAULT_MENU_ITEMS[key].forEach((path: string) =>
         registerSetting({
           name: `menu-item-${key}__${path}`,
           label: `Display ${key} - ${path}`,
