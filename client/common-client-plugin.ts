@@ -1,5 +1,5 @@
 import { RegisterClientOptions } from '@peertube/peertube-types/client'
-import { MenuItem } from '../shared/constants';
+import { DEFAULT_MENU_ITEMS, MenuItem } from '../shared/constants';
 
 async function register ({ registerHook, peertubeHelpers }: RegisterClientOptions) {
   const settings = await peertubeHelpers.getSettings()
@@ -28,7 +28,18 @@ async function register ({ registerHook, peertubeHelpers }: RegisterClientOption
 
       const filteredLinks = defaultLinks.map((section) => ({
         ...section,
-        links: section.links.filter((link) => enabledMenuItems[section.key].some((l) => l === link.path))
+        links: section.links.filter((link) => {
+          if (Object.keys(DEFAULT_MENU_ITEMS).includes(section.key) === false) {
+            return true
+          }
+
+          if ((DEFAULT_MENU_ITEMS[section.key as keyof typeof DEFAULT_MENU_ITEMS] || []).includes(link.path) === false) {
+            // Keep links added by other plugins
+            return true
+          }
+
+          return enabledMenuItems[section.key].some((l) => l === link.path)
+        })
       }))
 
       const itemSections = items.trim().split('\n\n')
