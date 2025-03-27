@@ -22,26 +22,35 @@ async function register ({ registerHook, peertubeHelpers }: RegisterClientOption
   registerHook({
     target: 'filter:left-menu.links.create.result',
     handler: async (defaultLinks: MenuItem[]) => {
-      const { enabled, items } = await peertubeHelpers.getSettings() as { enabled: boolean, items: string };
+      const { enabled, items, hideIfLoggedIn } = await peertubeHelpers.getSettings() as { enabled: boolean, items: string, hideIfLoggedIn: boolean };
+      console.log('3');
+      console.log('hideIfLoggedIn:', hideIfLoggedIn);
+      console.log('isLoggedIn:', peertubeHelpers.isLoggedIn());
+      console.log('defaultLinks:', defaultLinks);
 
       if (!enabled) return defaultLinks;
+
+      if (hideIfLoggedIn && peertubeHelpers.isLoggedIn()) {
+        // If the user is logged in and hideIfLoggedIn is true, return the default items
+        return defaultLinks;
+      }
 
       const filteredLinks = defaultLinks.map((section) => ({
         ...section,
         links: section.links.filter((link) => {
           if (Object.keys(DEFAULT_MENU_ITEMS).includes(section.key) === false) {
             // Keep links added by other plugins
-            return true
+            return true;
           }
 
-          if ((DEFAULT_MENU_ITEMS[section.key as keyof typeof DEFAULT_MENU_ITEMS] || []).includes(link.path) === false) {
+          if ((DEFAULT_MENU_ITEMS[section.key as keyof typeof DEFAULT_MENU_ITEMS] || []).includes(link.path || '') === false) {
             // Keep links added by other plugins
-            return true
+            return true;
           }
 
-          return enabledMenuItems[section.key].some((l) => l === link.path)
-        })
-      }))
+          return enabledMenuItems[section.key].some((l) => l === link.path);
+        }),
+      }));
 
       const itemSections = items.trim().split('\n\n')
         .reduce((acc, val) => {
@@ -51,14 +60,25 @@ async function register ({ registerHook, peertubeHelpers }: RegisterClientOption
             key: header.toLowerCase().replace(' ', '-'),
             title: header,
             links: links.filter(l => l).map(link => {
-              const [, href] = /\(([^)]+)\)/.exec(link) || [];
-              const [, label] = link.match(/\[(.*?)\]/) || [];
+              const [, path] = link.match(/\[path:([^\]]+)\]/) || []; // Extract path
+              const [, url] = link.match(/\[url:([^\]]+)\]/) || []; // Extract URL
+              const [, label] = link.match(/\[(.*?)\]/) || []; // Extract label
+              const [, icon] = link.match(/\[icon:([^\]]+)\]/) || []; // Extract icon
+              const [, iconClass] = link.match(/\[iconClass:([^\]]+)\]/) || []; // Extract iconClass
+              const [, isPrimaryButton] = link.match(/\[isPrimaryButton:(true|false)\]/) || []; // Extract isPrimaryButton
+
+              // Validation: Ensure either path or url is provided, but not both
+              if ((path && url) || (!path && !url)) {
+                throw new Error(`Invalid link configuration: Provide either a path or a URL, but not both. Link: ${link}`);
+              }
 
               return {
-                icon: '',
-                label,
-                path: href,
-                shortLabel: label
+                icon: icon || 'home', // Default to 'default-icon' if not provided
+                iconClass: iconClass || undefined, // Explicitly set to undefined if not provided
+                label: label,
+                path: path || undefined, // Set path if provided
+                url: url || undefined, // Set url if provided
+                isPrimaryButton: isPrimaryButton === 'true', // Convert string to boolean, default to false
               };
             }),
           };

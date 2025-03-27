@@ -12,6 +12,14 @@ async function register ({
     private: false,
   });
 
+  registerSetting({
+    name: 'hideIfLoggedIn',
+    label: 'Hide Extra Menu Items If User Is Logged In',
+    type: 'input-checkbox',
+    default: false,
+    private: false,
+  });
+
   (Object.keys(DEFAULT_MENU_ITEMS) as Array<'on-instance' | 'in-my-library'>).map((key) =>
     DEFAULT_MENU_ITEMS[key].forEach((path: string) =>
         registerSetting({
@@ -25,8 +33,9 @@ async function register ({
     )
 
   const defaultItems = `
-Custom section
-[First item](https://joinpeertube.org)
+Section Title
+[Link 1 Label] [url:https://example.com] [icon:external-link] [iconClass:my-class] [isPrimaryButton:false]
+[Link 2 Label] [url:https://example.com] [icon:external-link] [iconClass:my-class] [isPrimaryButton:true]
 `;
 
   registerSetting({
