@@ -1,3 +1,8 @@
+// Define the Params type
+export type Params = {
+  [key: string]: string | string[];
+};
+
 export interface MenuItem {
   key: string;
   title: string;
@@ -7,9 +12,8 @@ export interface MenuItem {
     label: string; // Label for the link
     path?: string; // Optional path for the link
     url?: string; // Optional URL for the link
-    //query?: Params; // Optional query parameters
+    query?: Params; // Allow query to be a string or a Params object
     isPrimaryButton?: boolean; // Optional flag to indicate if it's a primary button (default: false)
-    //ngClass?: string; // Optional Angular class for styling
   }[];
 }
 

@@ -14,9 +14,17 @@ async function register ({
 
   registerSetting({
     name: 'hideIfLoggedIn',
-    label: 'Hide Extra Menu Items If User Is Logged In',
+    label: 'Hide your custom left menu sections/links if logged in.',
     type: 'input-checkbox',
     default: false,
+    private: false,
+  });
+
+  registerSetting({
+    name: 'showButtonIfLive',
+    label: 'Show a custom left menu link if any user is live on your instance.',
+    type: 'input-checkbox',
+    default: true,
     private: false,
   });
 
@@ -33,9 +41,13 @@ async function register ({
     )
 
   const defaultItems = `
-Section Title
-[Link 1 Label] [url:https://example.com] [icon:external-link] [iconClass:my-class] [isPrimaryButton:false]
-[Link 2 Label] [url:https://example.com] [icon:external-link] [iconClass:my-class] [isPrimaryButton:true]
+My First Section
+[label:My External Link] [destination:https://example.com/videos/watch/12345] [icon:video] [iconClass:custom-icon-class] [isPrimaryButton:true]
+[label:My Internal Link] [destination:/videos/browse?categoryOneOf=19&sort=-publishedAt] [icon:home] [iconClass:custom-icon-class] [isPrimaryButton:false]
+
+My Second Section
+[destination:/videos/trending] [label:Trending Videos] [icon:trending]
+[destination:/videos/recently-added] [label:Recently Added] [icon:share]
 `;
 
   registerSetting({
