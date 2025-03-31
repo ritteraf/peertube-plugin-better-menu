@@ -1,7 +1,7 @@
 {
   "name": "peertube-plugin-better-menu",
   "description": "Better Menu for PeerTube",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "ritteraf",
   "bugs": "https://github.com/ritteraf/peertube-plugin-better-menu/issues",
   "clientScripts": [
