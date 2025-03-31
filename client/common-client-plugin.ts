@@ -41,58 +41,58 @@ async function register ({ registerHook, peertubeHelpers }: RegisterClientOption
           const response = await fetch(`${window.location.origin}/api/v1/videos?isLive=true`);
           if (!response.ok) {
             console.error('Failed to fetch live videos:', response.status, response.statusText);
-            return defaultLinks;
-          }
+          } else {
+            const liveData = await response.json();
+            isAnyUserLive = liveData.total > 0;
+            console.log('Is any user live:', isAnyUserLive);
 
-          const liveData = await response.json();
-          isAnyUserLive = liveData.total > 0;
-          console.log('Is any user live:', isAnyUserLive);
+            // Add a default link if any user is live
+            if (isAnyUserLive) {
+              let pathToReturn: string = '';
+              let queryToReturn: Params | undefined = undefined; // Define queryToReturn as Params
 
-          // Add a default link if any user is live
-          if (isAnyUserLive) {
-            let pathToReturn: string = '';
-            let queryToReturn: Params | undefined = undefined; // Define queryToReturn as Params
+              if (liveData.total === 1) {
+                // Only one user is live - extract the path and query parameters from the URL
+                const fullUrl = liveData.data[0].url; // Full URL of the live stream
+                const urlObject = new URL(fullUrl); // Parse the URL
+                pathToReturn = urlObject.pathname; // Extract the path portion
 
-            if (liveData.total === 1) {
-              // Only one user is live - extract the path and query parameters from the URL
-              const fullUrl = liveData.data[0].url; // Full URL of the live stream
-              const urlObject = new URL(fullUrl); // Parse the URL
-              pathToReturn = urlObject.pathname; // Extract the path portion
+                // Parse the query string into a Params object
+                queryToReturn = urlObject.search
+                  .substring(1) // Remove the leading '?'
+                  .split('&')
+                  .reduce((acc, param) => {
+                    const [key, value] = param.split('=');
+                    if (key) acc[key] = decodeURIComponent(value || ''); // Decode and assign the value
+                    return acc;
+                  }, {} as Params);
+              } else {
+                // Multiple users are live - go to the browse page
+                pathToReturn = `/videos/browse`;
+                queryToReturn = { live: 'true' }; // Construct a Params object
+              }
 
-              // Parse the query string into a Params object
-              queryToReturn = urlObject.search
-                .substring(1) // Remove the leading '?'
-                .split('&')
-                .reduce((acc, param) => {
-                  const [key, value] = param.split('=');
-                  if (key) acc[key] = decodeURIComponent(value || ''); // Decode and assign the value
-                  return acc;
-                }, {} as Params);
-            } else {
-              // Multiple users are live - go to the browse page
-              pathToReturn = `/videos/browse`;
-              queryToReturn = { live: 'true' }; // Construct a Params object
+              defaultLinks.push({
+                key: 'live-now',
+                title: 'Watch Live',
+                links: [
+                  {
+                    label: 'Live Now!',
+                    path: pathToReturn,
+                    query: queryToReturn, // Use the parsed Params object
+                    icon: 'live',
+                    isPrimaryButton: true,
+                  },
+                ],
+              });
             }
-
-            defaultLinks.push({
-              key: 'live-now',
-              title: 'Watch Live',
-              links: [
-                {
-                  label: 'Live Now!',
-                  path: pathToReturn,
-                  query: queryToReturn, // Use the parsed Params object
-                  icon: 'live',
-                  isPrimaryButton: true,
-                },
-              ],
-            });
           }
         } catch (error) {
           console.error('Error fetching live videos:', error);
         }
       }
 
+      // Continue processing custom links regardless of the API call result
       const filteredLinks = defaultLinks.map((section) => ({
         ...section,
         links: section.links.filter((link) => {

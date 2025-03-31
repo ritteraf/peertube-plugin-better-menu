@@ -14,7 +14,6 @@ For our use case, we wanted the ability to populate the left menu with relevant 
 4. Conditionally hide your custom left menu links if a user is logged in
 
 ## Usage
-
 1. Install plugin
 2. Go to plugin settings
 3. Enable the plugin, choose your settings, and add your own custom sections.
