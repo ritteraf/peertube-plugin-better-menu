@@ -19,6 +19,7 @@ For our use case, we wanted the ability to populate the left menu with relevant 
 3. Enable the plugin, choose your settings, and add your own custom sections.
 
 ## Example custom section:
+```
 My First Section
 [label:My External Link] [destination:https://example.com/videos/watch/12345] [icon:video] [iconClass:custom-icon-class] [isPrimaryButton:true]
 [label:My Internal Link] [destination:/videos/browse?categoryOneOf=19&sort=-publishedAt] [icon:home] [iconClass:custom-icon-class] [isPrimaryButton:false]
@@ -26,7 +27,7 @@ My First Section
 My Second Section
 [destination:/videos/trending] [label:Trending Videos] [icon:trending]
 [destination:/videos/recently-added] [label:Recently Added] [icon:share]
-
+```
 ## Icons Choices:
 the [icon:] parameter can specify any icon that is currently included in the PeerTube package. That list is available at:
 https://github.com/Chocobozzz/PeerTube/blob/develop/client/src/app/shared/shared-icons/global-icon.component.ts
