@@ -116,7 +116,7 @@ async function register ({ registerHook, peertubeHelpers }: RegisterClientOption
         .reduce((acc, val) => {
           const [header, ...links] = val.split('\n');
 
-          return {
+          const section = {
             key: header.toLowerCase().replace(' ', '-'),
             title: header,
             links: links.filter((l) => l).map((link) => {
@@ -160,7 +160,7 @@ async function register ({ registerHook, peertubeHelpers }: RegisterClientOption
               }
 
               return {
-                icon: icon || '', // Default to '' if not provided
+                icon: icon || undefined, // Default to undefined if not provided
                 iconClass: iconClass || undefined, // Explicitly set to undefined if not provided
                 label: label || 'My Link', // Use the parsed label
                 path: path || undefined, // Use path if provided
@@ -170,9 +170,12 @@ async function register ({ registerHook, peertubeHelpers }: RegisterClientOption
               };
             }),
           };
-        }, null as MenuItem | null);
 
-      return [...filteredLinks, itemSections];
+          acc.push(section); // Add the parsed section to the accumulator array
+          return acc;
+        }, [] as MenuItem[]); // Initialize the accumulator as an empty array
+
+      return [...filteredLinks, ...itemSections];
     },
   });
 }
