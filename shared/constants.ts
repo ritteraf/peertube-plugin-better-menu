@@ -7,7 +7,7 @@ export interface MenuItem {
   key: string;
   title: string;
   links: {
-    icon: string; // Icon name for the link
+    icon?: string; // Icon name for the link
     iconClass?: string; // Optional CSS class for the icon
     label: string; // Label for the link
     path?: string; // Optional path for the link
