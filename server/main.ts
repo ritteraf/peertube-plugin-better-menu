@@ -42,7 +42,7 @@ async function register ({
 
   const defaultItems = `
 My First Section
-[label:My External Link] [destination:https://example.com/videos/watch/12345] [icon:video] [iconClass:custom-icon-class] [isPrimaryButton:true]
+[label:My External Link] [destination:https://example.com/videos/watch/12345] [icon:videos] [iconClass:custom-icon-class] [isPrimaryButton:true]
 [label:My Internal Link] [destination:/videos/browse?categoryOneOf=19&sort=-publishedAt] [icon:home] [iconClass:custom-icon-class] [isPrimaryButton:false]
 
 My Second Section
