@@ -1,7 +1,7 @@
 {
   "name": "peertube-plugin-better-menu",
-  "description": "Better Menu for PeerTube",
-  "version": "0.1.3",
+  "description": "Make your left menu actually useful for non-logged in users!",
+  "version": "0.1.4",
   "author": "ritteraf",
   "bugs": "https://github.com/ritteraf/peertube-plugin-better-menu/issues",
   "clientScripts": [

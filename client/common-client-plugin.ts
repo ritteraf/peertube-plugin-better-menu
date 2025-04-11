@@ -167,6 +167,21 @@ async function register ({ registerHook, peertubeHelpers }: RegisterClientOption
                 url: url || undefined, // Use URL if provided
                 query: query || undefined, // Use parsed query if provided
                 isPrimaryButton: isPrimaryButton === 'true', // Convert string to boolean, default to false
+                click: path
+                  ? () => {
+                      const queryString = query
+                        ? '?' +
+                          Object.entries(query)
+                            .map(([key, value]) =>
+                              Array.isArray(value)
+                                ? value.map((v) => `${key}=${encodeURIComponent(v)}`).join('&')
+                                : `${key}=${encodeURIComponent(value)}`
+                            )
+                            .join('&')
+                        : '';
+                      window.location.href = `${path}${queryString}`; // Navigate to the relative path with query parameters
+                    }
+                  : undefined, // No click handler for full URLs
               };
             }),
           };
