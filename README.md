@@ -11,24 +11,36 @@ For our use case, we wanted the ability to populate the left menu with relevant 
 1. Add your own custom left menu section and links (Internal or External Link)
 2. Remove unwanted system generated left menu links
 3. Conditionally show a "Live Now!" button in the left menu, if any user on your instance is live
-4. Conditionally hide your custom left menu links if a user is logged in
+4. **NEW** Conditionally hide or show ANY link based on if a user is logged in or not
 
 ## Usage
 1. Install plugin
 2. Go to plugin settings
 3. Enable the plugin, choose your settings, and add your own custom sections.
 
+4. To show a link to all users, regardless of logged in status, do NOT define ```showIfLoggedIn``` at all on the link
+5. To show a link to ONLY logged in users: ```[showIfLoggedIn:true]```
+6. To show a link to ONLY NON-logged in users: ```[showIfLoggedIn:false]```
+
+## Available parameters for every link
+• ```[label:]``` (REQUIRED): The text shown in the menu
+• ```[destination:]``` (REQUIRED): The link destination (internal or external)
+• ```[icon:]``` (OPTIONAL): The icon shown in the menu
+• ```[iconClass:]``` (OPTIONAL): Optional css class added to the link for further customization
+• ```[isPrimaryButton:]``` (OPTIONAL): Converts the visual layout of a "normal" link to a "primary" link as defined by your theme
+• ```[showIfLoggedIn:]``` (OPTIONAL): Conditionally show/hide the link based on if a user is currently logged in
+
 ## Example custom section:
 Reference the example code below for all customizations available to a menu item:
 
 ```
 My First Section
-[label:My External Link] [destination:https://example.com/videos/watch/12345] [icon:videos] [iconClass:custom-icon-class] [isPrimaryButton:true]
-[label:My Internal Link] [destination:/videos/browse?categoryOneOf=19&sort=-publishedAt] [icon:home] [iconClass:custom-icon-class] [isPrimaryButton:false]
+[label:My External Link] [destination:https://example.com/videos/watch/12345] [icon:videos] [iconClass:custom-icon-class] [isPrimaryButton:true] [showIfLoggedIn:false]
+[label:My Internal Link] [destination:/videos/browse?categoryOneOf=19&sort=-publishedAt] [icon:home] [iconClass:custom-icon-class] [isPrimaryButton:false] [showIfLoggedIn:true]
 
 My Second Section
 [destination:/videos/trending] [label:Trending Videos] [icon:trending]
-[destination:/videos/recently-added] [label:Recently Added] [icon:share]
+[destination:/videos/recently-added] [label:Recently Added] [icon:share] [showIfLoggedIn:true]
 ```
 
 ## Icons Choices:

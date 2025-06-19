@@ -3,32 +3,114 @@ export type Params = {
   [key: string]: string | string[];
 };
 
+// This is for a single menu link
 export interface MenuItem {
+  icon?: string;
+  iconClass?: string;
+  label: string;
+  path?: string;
+  url?: string;
+  query?: Params;
+  isPrimaryButton?: boolean;
+  showIfLoggedIn?: boolean;
+}
+
+// (Optional) If you want to keep sections, define a separate type:
+export interface MenuSection {
   key: string;
   title: string;
-  links: {
-    icon?: string; // Icon name for the link
-    iconClass?: string; // Optional CSS class for the icon
-    label: string; // Label for the link
-    path?: string; // Optional path for the link
-    url?: string; // Optional URL for the link
-    query?: Params; // Allow query to be a string or a Params object
-    isPrimaryButton?: boolean; // Optional flag to indicate if it's a primary button (default: false)
-  }[];
+  links: MenuItem[];
 }
+
+export const CORE_LINKS = [
+  {
+    key: 'home',
+    label: 'Home',
+    icon: 'home',
+    path: '/',
+    default: true
+  },
+  {
+    key: 'subscriptions',
+    label: 'Subscriptions',
+    icon: 'subscriptions',
+    path: '/videos/subscriptions',
+    default: true
+  },
+  {
+    key: 'settings',
+    label: 'Settings',
+    icon: 'config',
+    path: '/admin/settings',
+    default: true
+  },
+  {
+    key: 'admin-overview',
+    label: 'Admin Overview',
+    icon: 'overview',
+    path: '/admin/overview',
+    default: true
+  }
+  // Add more as needed
+];
 
 export const DEFAULT_MENU_ITEMS = {
   'in-my-library': [
-    '/my-library/video-channels',
-    '/my-library/videos',
-    '/my-library/video-playlists',
-    '/videos/subscriptions',
-    '/my-library/history/videos'
+    {
+      key: 'video-channels',
+      label: 'Channels',
+      icon: 'channel',
+      path: '/my-library/video-channels'
+    },
+    {
+      key: 'videos',
+      label: 'Videos',
+      icon: 'videos',
+      path: '/my-library/videos'
+    },
+    {
+      key: 'video-playlists',
+      label: 'Playlists',
+      icon: 'playlists',
+      path: '/my-library/video-playlists'
+    },
+    {
+      key: 'subscriptions',
+      label: 'Subscriptions',
+      icon: 'subscriptions',
+      path: '/videos/subscriptions'
+    },
+    {
+      key: 'history-videos',
+      label: 'History',
+      icon: 'history',
+      path: '/my-library/history/videos'
+    }
   ],
   'on-instance': [
-    '/videos/overview',
-    '/videos/trending',
-    '/videos/recently-added',
-    '/videos/local'
+    {
+      key: 'overview',
+      label: 'Overview',
+      icon: 'overview',
+      path: '/videos/overview'
+    },
+    {
+      key: 'trending',
+      label: 'Trending',
+      icon: 'trending',
+      path: '/videos/trending'
+    },
+    {
+      key: 'recently-added',
+      label: 'Recently Added',
+      icon: 'share',
+      path: '/videos/recently-added'
+    },
+    {
+      key: 'local',
+      label: 'Local',
+      icon: 'local',
+      path: '/videos/local'
+    }
   ]
 };
