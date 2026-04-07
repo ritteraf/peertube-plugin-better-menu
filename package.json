@@ -1,7 +1,7 @@
 {
   "name": "peertube-plugin-better-menu",
   "description": "A fully customizable menu plugin for PeerTube. This plugin allows you to add/remove/reorder menu items, and group them into custom sections. You can also conditionally show menu items based on if a user is logged in or not.",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "author": "ritteraf",
   "bugs": "https://github.com/ritteraf/peertube-plugin-better-menu/issues",
   "clientScripts": [

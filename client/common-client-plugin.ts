@@ -80,15 +80,23 @@ async function register({ registerHook, peertubeHelpers }: RegisterClientOptions
       }
 
       // Parse user-defined sections and links into MenuSection[]
-      const userSections: MenuSection[] = items
-        .trim()
-        .split('\n\n')
+      // Group lines into sections: any line not starting with '[' begins a new section
+      const lines = items.replace(/\r\n?/g, '\n').trim().split('\n').filter((l) => l.trim());
+      const rawSections: { header: string; links: string[] }[] = [];
+      for (const line of lines) {
+        if (!line.trimStart().startsWith('[')) {
+          rawSections.push({ header: line.trim(), links: [] });
+        } else if (rawSections.length > 0) {
+          rawSections[rawSections.length - 1].links.push(line);
+        }
+      }
+
+      const userSections: MenuSection[] = rawSections
         .map((val, idx) => {
-          const [header, ...links] = val.split('\n');
+          const { header, links } = val;
           console.debug(`[BetterMenu] Parsing section ${idx}:`, header);
 
           const menuLinks: MenuItem[] = links
-            .filter((l) => l)
             .map((link, linkIdx) => {
               const [, destination] = link.match(/\[destination:([^\]]+)\]/) || [];
               const [, label] = link.match(/\[label:([^\]]+)\]/) || [];
